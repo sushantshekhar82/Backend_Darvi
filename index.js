@@ -8,9 +8,9 @@ const cartRoute = require('./routes/cart')
 const orderRouter = require('./routes/order')
 
 app.use(express.json())
-app.use(cors({ origin: ['https://vendingmachine-theta.vercel.app','https://fantastic-snickerdoodle-def3e9.netlify.app','http://localhost:3000'], optionsSuccessStatus: 200 }));
+app.use(cors({ origin: ['http://daarvipharmaceuticals.com','https://fantastic-snickerdoodle-def3e9.netlify.app','http://localhost:3000'], optionsSuccessStatus: 200 }));
 
-app.options("*", cors({ origin: ['https://vendingmachine-theta.vercel.app','https://fantastic-snickerdoodle-def3e9.netlify.app','http://localhost:3000'], optionsSuccessStatus: 200 }));
+app.options("*", cors({ origin: ['http://daarvipharmaceuticals.com','https://fantastic-snickerdoodle-def3e9.netlify.app','http://localhost:3000'], optionsSuccessStatus: 200 }));
 
 app.use('/api',userRoute)
 app.use('/api/product',productRoute)
