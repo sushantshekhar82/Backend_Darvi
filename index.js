@@ -13,7 +13,7 @@ app.use(cors({ origin: ['https://fantastic-snickerdoodle-def3e9.netlify.app','ht
 app.options("*", cors({ origin: ['https://fantastic-snickerdoodle-def3e9.netlify.app','http://localhost:3000'], optionsSuccessStatus: 200 }));
 
 app.use('/api',userRoute)
-app.use('/api/product',productRoute)
+// app.use('/api/product',productRoute)
 app.use('/api/cart',cartRoute)
 app.use('/api/order',orderRouter)
 app.listen(8080,async()=>{
