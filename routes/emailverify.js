@@ -12,9 +12,10 @@ verifyEmailRoute.post('/get_user',async(req,res)=>{
         const token=req.body.token
        
         const userToken=await userModel.findOne({token:token});
-       
+       console.log("here3")
         if(userToken){
             if(userToken.emailVerify=="true" && userToken.token==null){
+                console.log("here3")
                 res.status(200).send({success:true,data:userToken})
             }
            
