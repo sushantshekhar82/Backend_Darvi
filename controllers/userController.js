@@ -25,46 +25,48 @@ const create_token=async(id)=>{
 
 const sendResetPasswordMail=async(name,email,token)=>{
  try {
-  const trasporter=  nodemailer.createTransport({
-        host:'smtp.gmail.com',
-        port:587,
-        secure:false,
-        requireTLS:true,
-        auth:{
-            user:config.emailUser,
-            pass:config.emailPassword
-        }
-
-    })
-    const mailOptions={
-        from:config.emailUser,
+    const transporter = nodemailer.createTransport({
+        service: 'sushant.shekhar151997@gmail.com',
+        port: 587,
+        secure: true,
+        auth: {
+          user: 'sushant.shekhar151997@gmail.com', // Replace with your email address
+          pass: 'jpen vqrh qrjf rvhj', // Replace with your email password
+        },
+      });
+  
+      const mailOptions = {
+        from: 'sushant.shekhar151997@gmail.com',
         to:email,
         subject:'Darvi Reset Password',
-        html:'<p>Hi'+name+`, please click on the link to reset your password <a href="http://localhost:8080/api/forget_password?token=${token}"> click here</a> `
+        html:'<p>Hi '+name+`, please click on the link to verify your email <a href="http://localhost:3000/register/verify_email?token=${token}"> Verify Now</a> `
 
-    }
-    trasporter.sendMail(mailOptions,function(error,info){
-        if(error){
-            console.log(error.message)
-        }else{
-            console.log("mail has been send",info.response);
-        }
-
-    })
+      };
+  
+      // Send the email
+      const info = await transporter.sendMail(mailOptions);
+  
+      console.log('Email sent:', info.response);
+  
+  
+   
     
  } catch (error) {
-    res.status(400).send(error.message) 
+      console.log(error)
  }
 }
 
 const register_user=async(req,res)=>{
     try {
         const spassword=await securePassword(req.body.password)
+        const EmailVerifyCode = randomstring.generate(8);
+
       const user=  new userModel({
           name:req.body.name,
           email:req.body.email,
           password:spassword,
           mobile:req.body.mobile,
+          token:EmailVerifyCode
 
         })
         const userData=await userModel.findOne({email:req.body.email});
@@ -72,6 +74,7 @@ const register_user=async(req,res)=>{
        if(userData||usermobile){
         res.status(200).send({success:false,msg:"User already Registered"})
        }else{
+        await sendResetPasswordMail(req.body.name,req.body.email,EmailVerifyCode)
         const user_data= await user.save();
         res.status(200).send({success:true,data:user_data})
        }
@@ -88,7 +91,7 @@ const login=async(req,res)=>{
         
         const userData=await userModel.findOne({email})
         console.log(userData)
-        if(userData){
+        if(userData && userData.emailVerify=="true"||userData.token==null){
        const passwordMatch=   await bcrypt.compare(password,userData.password)
            if(passwordMatch){
             const tokenData=await create_token(userData._id)
@@ -98,7 +101,8 @@ const login=async(req,res)=>{
                 name:userData.name,
                 email:userData.email,
                 image:userData.image,
-                mobile:userData.mobile
+                mobile:userData.mobile,
+                
                 
 
             }

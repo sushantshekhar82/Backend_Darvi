@@ -61,7 +61,8 @@ cartRoute.get("/cartitems/:id",async(req,res)=>{
         const productItem=await productModel.findById({ _id: prodId})
         
         res.status(201).json({ message: 'Product added to cart', cartItem: savedCartItem,productImage:productItem.image1url });
-    } catch (error) {
+    
+      } catch (error) {
         res.status(500).json({ msg:error.message });
     }
   })

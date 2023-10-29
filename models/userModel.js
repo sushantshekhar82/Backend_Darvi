@@ -21,9 +21,13 @@ const userSchema= mongoose.Schema({
         type:String,
         required:true
     },
+    emailVerify:{
+        type:String,
+        default:false
+    },
     token:{
         type:String,
-        default:''
+        required:true
     }
 })
 const userModel=mongoose.model("user",userSchema)

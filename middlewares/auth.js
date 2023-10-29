@@ -10,7 +10,7 @@ const verifyToken=async(req,res,next)=>{
     }else{
       try {
         const decode = jwt.verify(token, config.jwtSecretKey);
-       req.user=decode;
+        req.user=decode;
       } catch (error) {
         res.status(400).send(error.message) 
       }
