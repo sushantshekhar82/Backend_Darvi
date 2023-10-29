@@ -65,6 +65,9 @@ const sendResetPasswordMail=async(name,email)=>{
                 res.status(200).send({success:true,message:"mail send successfully"})
             }
            
+    }else{
+        res.status(200).send({success:true,message:"No user found"})
+   
     }
    
 
@@ -97,7 +100,7 @@ forgetPassword.put("/",async(req,res)=>{
            console.log("here2")
        res.status(200).send({success:true,message:"password update successfully",data:update})
     }else{
-        res.status(200).send({success:true,message:"No email found ,please register"})
+        res.status(200).send({success:true,message:"No user found"})
    
     }
        
