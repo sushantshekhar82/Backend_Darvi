@@ -38,7 +38,7 @@ const sendResetPasswordMail=async(name,email,token)=>{
       const mailOptions = {
         from: 'sushant.shekhar151997@gmail.com',
         to:email,
-        subject:'Darvi Reset Password',
+        subject:'Darvi Email Verify',
         html:'<p>Hi '+name+`, please click on the link to verify your email <a href="https://daarvipharmaceutical.vercel.app/register/verify_email?token=${token}&email=${email}"> Verify Now</a> `
 
       };
