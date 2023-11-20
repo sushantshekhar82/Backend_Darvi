@@ -75,4 +75,41 @@ orderRouter.get('/myorders/:userId', async (req, res) => {
     res.status(500).json({ error: error.message});
   }
 });
+
+orderRouter.get('/admin/allorders', async (req, res) => {
+  try {
+   
+
+    // Find all orders with the specified userId
+    const orders = await orderModel.find().populate('address').sort({ createdAt: 1 }); // Assuming you want to populate the associated address
+
+    
+    const reversedOrders = orders.reverse();
+
+    res.status(200).json({ message: 'Orders found', orders:reversedOrders });
+  } catch (error) {
+    res.status(500).json({ error: error.message});
+  }
+});
+
+orderRouter.put('/admin/update/:id', async (req, res) => {
+  try{
+    const{status,deliveryDate}=req.body
+
+    const product = await orderModel.findById(req.params.id);
+
+    if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+    }
+
+    product.status = status;
+    product.deliveryDate = deliveryDate;
+    await product.save();
+
+    res.status(200).json({ message: 'updated successfully' });
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ message: 'Internal server error' });
+}
+});
 module.exports = orderRouter;

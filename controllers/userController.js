@@ -38,8 +38,8 @@ const sendResetPasswordMail=async(name,email,token)=>{
       const mailOptions = {
         from: 'sushant.shekhar151997@gmail.com',
         to:email,
-        subject:'Darvi Email Verify',
-        html:'<p>Hi '+name+`, please click on the link to verify your email <a href="https://daarvipharmaceutical.vercel.app/register/verify_email?token=${token}&email=${email}"> Verify Now</a> `
+        subject:'Darvi Reset Password',
+        html:'<p>Hi '+name+`, please click on the link to verify your email <a href="http://localhost:3000/register/verify_email?token=${token}"> Verify Now</a> `
 
       };
   
@@ -90,34 +90,40 @@ const login=async(req,res)=>{
         const password=req.body.password;
         
         const userData=await userModel.findOne({email})
-        console.log(userData)
-        if(userData && userData.emailVerify=="true"||userData.token==null){
-       const passwordMatch=   await bcrypt.compare(password,userData.password)
-           if(passwordMatch){
-            const tokenData=await create_token(userData._id)
-
-            const userResult={
-                _id:userData._id,
-                name:userData.name,
-                email:userData.email,
-                image:userData.image,
-                mobile:userData.mobile,
-                
-                
-
+        
+        if(userData){
+          if(userData.emailVerify=="true"||userData.token==null){
+            const passwordMatch=   await bcrypt.compare(password,userData.password)
+            if(passwordMatch){
+             const tokenData=await create_token(userData._id)
+ 
+             const userResult={
+                 _id:userData._id,
+                 name:userData.name,
+                 email:userData.email,
+                 image:userData.image,
+                 mobile:userData.mobile,
+                 role:userData.role
+                 
+                 
+ 
+             }
+             const resPonse={
+                 success:true,
+                 data:userResult,
+                token:tokenData
+ 
+             }
+             res.status(200).send(resPonse)
+ 
+            }else{
+             res.status(200).send({success:false,msg:"Login detail are incorrect"}) 
             }
-            const resPonse={
-                success:true,
-                data:userResult,
-               token:tokenData
-
-            }
-            res.status(200).send(resPonse)
-
-           }else{
-            res.status(200).send({success:false,msg:"Login detail are incorrect"}) 
-           }
-
+ 
+          }else{
+            res.status(200).send({success:false,msg:"Please verify you email"})
+          }
+          
         }else{
             res.status(200).send({success:false,msg:"Invalid username or password,Please Register first"}) 
         }

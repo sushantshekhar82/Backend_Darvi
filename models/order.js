@@ -62,6 +62,14 @@ const orderSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
     },
+    status:{
+        type:String,
+        default:"pending"
+    },
+    deliveryDate: {
+        type: Date,
+        default: "",
+    },
 });
 
 const orderModel = mongoose.model('order', orderSchema);

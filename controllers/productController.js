@@ -17,7 +17,6 @@ const products=async(req,res)=>{
             image3url:req.body.image3url,
             image4url:req.body.image4url,
 
-
         })
        const products=await product.save();
        res.status(200).send({success:true,msg:'uploaded successfully'})

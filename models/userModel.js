@@ -25,6 +25,10 @@ const userSchema= mongoose.Schema({
         type:String,
         default:false
     },
+    role:{
+        type:String,
+        default:"customer"
+    },
     token:{
         type:String,
         required:true

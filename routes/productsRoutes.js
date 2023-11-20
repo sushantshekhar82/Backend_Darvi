@@ -43,5 +43,45 @@ productRoute.get('/allproducts/:id',async(req,res)=>{
    }
 })
 productRoute.post('/allproducts',productController.products)
+productRoute.put('/edit/:id',async(req,res)=>{
+    try{
+    const{productName,price,shortdescription,longdescription}=req.body
+
+    const product = await productModel.findById(req.params.id);
+
+    if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+    }
+
+    product.productname = productName;
+    product.price = price;
+    product.shortdescription=shortdescription
+    product.longdescription=longdescription
+    await product.save();
+
+    res.status(200).json({ message: 'Product updated successfully' });
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ message: 'Internal server error' });
+}
+});
+productRoute.delete('/delete/:id',async(req,res)=>{
+    try{
+    
+    const product = await productModel.findByIdAndDelete(req.params.id);
+console.log(product)
+    if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+    }
+
+   
+
+    res.status(200).json({ message: 'Product deleted successfully' });
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ message: 'Internal server error' });
+}
+})
+
 
 module.exports=productRoute;

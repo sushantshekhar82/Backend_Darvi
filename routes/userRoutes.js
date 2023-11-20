@@ -26,7 +26,20 @@ const path=require('path')
 // upload.single('image')
 const user_controller=require("../controllers/userController")
 const verifyToken = require('../middlewares/auth')
+const userModel = require('../models/userModel')
+userRoute.get('/:id',async(req,res)=>{
+    try {
+        const userId=req.params.id;
 
+        const user=await userModel.findOne({_id:userId});
+
+        const role=user.role
+
+        res.status(200).send({success:true,role:role})
+    } catch (error) {
+        res.status(400).send(error.message)
+    }
+})
 userRoute.post('/register',user_controller.register_user)
 userRoute.post('/login',user_controller.login)
 userRoute.post('/update_password',verifyToken,user_controller.update_password)

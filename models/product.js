@@ -7,7 +7,7 @@ const productSchema=mongoose.Schema({
     },
     category:{
         type:String,
-        required:true 
+        default:"Syrup"
      },
      shortdescription:{
         type:String,
@@ -23,11 +23,11 @@ const productSchema=mongoose.Schema({
      },
      rating:{
         type:Number,
-        required:true 
+        default:4 
      },
      productquantity:{
         type:Number,
-        required:true 
+        default:1
      },
      image1url:{
         type:String
