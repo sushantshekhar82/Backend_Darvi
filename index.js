@@ -9,9 +9,9 @@ const orderRouter = require('./routes/order')
 const verifyEmailRoute = require('./routes/emailverify')
 
 app.use(express.json())
-app.use(cors({ origin: ['https://daarvipharmaceutical.vercel.app','https://64de7e04c4b2ef124e393b4c--polite-monstera-043144.netlify.app','http://localhost:3000'], optionsSuccessStatus: 200 }));
+app.use(cors({ origin: ['https://daarvipharmaceutical.vercel.app','http://localhost:3000'], optionsSuccessStatus: 200 }));
 
-app.options("*", cors({ origin: ['https://daarvipharmaceutical.vercel.app','https://64de7e04c4b2ef124e393b4c--polite-monstera-043144.netlify.app','http://localhost:3000'], optionsSuccessStatus: 200 }));
+app.options("*", cors({ origin: ['https://daarvipharmaceutical.vercel.app','http://localhost:3000'], optionsSuccessStatus: 200 }));
 
 app.use('/api',userRoute)
 app.use('/api/product',productRoute)
