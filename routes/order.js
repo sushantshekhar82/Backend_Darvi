@@ -75,6 +75,29 @@ orderRouter.get('/myorders/:userId', async (req, res) => {
     res.status(500).json({ error: error.message});
   }
 });
+orderRouter.put('/update/:id', async (req, res) => {
+  try{
+    const{status}=req.body
+
+    const product = await orderModel.findById(req.params.id);
+
+    if (!product) {
+        return res.status(404).json({ message: 'Product not found' });
+    }else if(product.status=="cancelled"){
+      return res.status(200).json({ message: 'Already Requested' });
+    }else{
+      product.status = status;
+      await product.save();
+  
+      res.status(200).json({ message: 'updated successfully' });
+    }
+
+   
+} catch (error) {
+  console.error(error);
+  res.status(500).json({ message: 'Internal server error' });
+}
+});
 
 orderRouter.get('/admin/allorders', async (req, res) => {
   try {

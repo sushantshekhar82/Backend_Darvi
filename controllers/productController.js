@@ -12,6 +12,8 @@ const products=async(req,res)=>{
             price:req.body.price,
             productquantity:req.body.productquantity,
             rating:req.body.rating,
+            dosage:req.body.dosage,
+            warning:req.body.warning,
             image1url:req.body.image1url,
             image2url:req.body.image2url,
             image3url:req.body.image3url,

@@ -29,6 +29,14 @@ const productSchema=mongoose.Schema({
         type:Number,
         default:1
      },
+     dosage:{
+      type:String
+
+     },
+     warning:{
+      type:String
+
+     },
      image1url:{
         type:String
 
