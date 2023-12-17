@@ -38,4 +38,23 @@ contactRoute.post('/create',async(req,res)=>{
     }
 })
 
+contactRoute.get('/getContact',async(req,res)=>{
+  try {
+    
+
+   
+        const contactData =  await contactModel.find()
+         
+          res.status(200).json(contactData);
+   
+     
+
+     
+  } catch (error) {
+
+    res.status(500).json({ error: error.message });
+
+  }
+})
+
 module.exports=contactRoute;
