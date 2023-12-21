@@ -39,7 +39,7 @@ const sendResetPasswordMail=async(name,email,token)=>{
         from: 'sushant.shekhar151997@gmail.com',
         to:email,
         subject:'Darvi Reset Password',
-        html:'<p>Hi '+name+`, please click on the link to verify your email <a href="https://daarvipharmaceutical.vercel.app/register/verify_email?token=${token}"> Verify Now</a> `
+        html:'<p>Hi '+name+`, please click on the link to verify your email <a href="https://daarvipharmaceuticals.com/register/verify_email?token=${token}"> Verify Now</a> `
 
       };
   
@@ -54,6 +54,38 @@ const sendResetPasswordMail=async(name,email,token)=>{
  }
 }
 
+const sendForgetPasswordMail=async(name,email,token)=>{
+    try {
+       const transporter = nodemailer.createTransport({
+           service: 'sushant.shekhar151997@gmail.com',
+           port: 587,
+           secure: true,
+           auth: {
+             user: 'sushant.shekhar151997@gmail.com', // Replace with your email address
+             pass: 'jpen vqrh qrjf rvhj', // Replace with your email password
+           },
+         });
+     
+         const mailOptions = {
+           from: 'sushant.shekhar151997@gmail.com',
+           to:email,
+           subject:'Darvi Reset Password',
+           html:'<p>Hi '+name+`, please click on the link to Reset your password <a href="https://daarvipharmaceuticals.com/forget_password?token=${token}"> Click here</a> `
+   
+         };
+     
+         // Send the email
+         const info = await transporter.sendMail(mailOptions);
+     
+         console.log('Email sent:', info.response);
+       
+       
+    } catch (error) {
+         console.log(error)
+    }
+   }
+
+
 const register_user=async(req,res)=>{
     try {
         const spassword=await securePassword(req.body.password)
@@ -64,6 +96,8 @@ const register_user=async(req,res)=>{
           email:req.body.email,
           password:spassword,
           mobile:req.body.mobile,
+          emailVerify:req.body.emailVerify,
+          role:req.body.role,
           token:EmailVerifyCode
 
         })
@@ -133,44 +167,50 @@ const login=async(req,res)=>{
 
 const update_password=async(req,res)=>{
     try {
-       const user_id=req.body.id;
-       const password=req.body.password;
+        const token=req.body.token
+        const userToken=await userModel.findOne({token:token});
+       console.log(userToken)
+        const password=req.body.password;
         
-      const data = await userModel.findOne({_id:user_id});
-           if(data){
+     
+           if(userToken){
             const newPassword=await securePassword(password)
-           const updatepassword=await userModel.findByIdAndUpdate({_id:user_id},{$set:{
+           const updatepassword=await userModel.findByIdAndUpdate({_id:userToken._id},{$set:{
             password:newPassword
            }})
-           res.status(200).send({success:true,msg:"Password updated"}) 
+           res.status(200).send({success:true,message:"Password reset"}) 
            }else{
-            res.status(200).send({success:false,msg:"User Id not found"}) 
+            res.status(200).send({success:false,message:"Not valid token"}) 
            }
     } catch (error) {
         res.status(400).send(error.message)
     }
 }
-// const forget_password=async(req,res)=>{
-//         try {
-//             const email=req.body.email
-//         const userData=await userModel.findOne({email:email})
-//         if(userData){
-//             const randomString=randomstring.generate()
-//             userModel.findOne({email:email},{$set:{token:randomString}})
-//             sendResetPasswordMail(userData.name,userData.email,randomString)
-//             res.status(200).send({success:true,msg:"Check you email "})
-//         }else{
-//             res.status(200).send({success:false,msg:"Email Doesn't Exist"})
-//         }
+const forget_password=async(req,res)=>{
+        try {
+            const email=req.body.email
+        const userData=await userModel.findOne({email:email})
+        if(userData){
+            const randomString=randomstring.generate()
+            await userModel.findOneAndUpdate(
+                { email: email },
+                { $set: { token: randomString } }
+            );
+            sendForgetPasswordMail(userData.name,userData.email,randomString)
+            res.status(200).send({success:true,message:"Check you email"})
+        }else{
+            res.status(200).send({success:false,message:"Email Doesn't Exist"})
+        }
             
-//         } catch (error) {
-//             res.status(400).send(error.message)
-//         }
-// }
+        } catch (error) {
+            res.status(400).send(error.message)
+        }
+}
 
 module.exports={
     register_user,
     login,
+    forget_password,
     update_password
    
 }

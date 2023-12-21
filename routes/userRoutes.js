@@ -42,6 +42,7 @@ userRoute.get('/:id',async(req,res)=>{
 })
 userRoute.post('/register',user_controller.register_user)
 userRoute.post('/login',user_controller.login)
-userRoute.post('/update_password',verifyToken,user_controller.update_password)
+userRoute.post('/forgetmail',user_controller.forget_password)
+userRoute.post('/update_password',user_controller.update_password)
 
 module.exports=userRoute

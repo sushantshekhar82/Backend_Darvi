@@ -11,9 +11,9 @@ const reviewRouter = require('./routes/review')
 const contactRoute = require('./routes/contact')
 
 app.use(express.json())
-app.use(cors({ origin: ['https://daarvipharmaceutical.vercel.app','http://localhost:3000'], optionsSuccessStatus: 200 }));
+app.use(cors({ origin: ['https://daarvipharmaceuticals.com','https://daarvipharmaceutical.vercel.app','http://localhost:3000'], optionsSuccessStatus: 200 }));
 
-app.options("*", cors({ origin: ['https://daarvipharmaceutical.vercel.app','http://localhost:3000'], optionsSuccessStatus: 200 }));
+app.options("*", cors({ origin: ['https://daarvipharmaceuticals.com','https://daarvipharmaceutical.vercel.app','http://localhost:3000'], optionsSuccessStatus: 200 }));
 
 app.use('/api',userRoute)
 app.use('/api/product',productRoute)
@@ -21,6 +21,7 @@ app.use('/api/verify_email',verifyEmailRoute)
 app.use('/api/cart',cartRoute)
 app.use('/api/order',orderRouter)
 app.use('/api/review',reviewRouter)
+app.use('/api/forget_password',userRoute)
 app.use('/api/contact',contactRoute)
 app.listen(8080,async()=>{
     try {
