@@ -2,6 +2,7 @@ const express = require('express');
 const orderModel = require('../models/order');
 const Address = require('../models/address');
 const cartModel = require('../models/cart');
+const verifyToken=require('../middlewares/auth')
 const orderRouter = express.Router();
 
 // Route to place an order
@@ -58,7 +59,7 @@ orderRouter.post('/placeorder', async (req, res) => {
     }
   });
 // Add more routes related to orders (e.g., get order history) here if needed
-orderRouter.get('/myorders/:userId', async (req, res) => {
+orderRouter.get('/myorders/:userId',verifyToken, async (req, res) => {
   try {
     const { userId } = req.params;
 

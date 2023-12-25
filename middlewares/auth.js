@@ -6,7 +6,8 @@ const verifyToken=async(req,res,next)=>{
     const token=req.body.token|| req.query.token || req.headers["authorization"];
 
     if(!token){
-        res.status(200).send({success:false,msg:"Token is required"})
+      console.log("here")
+        res.status(401).send({success:false,msg:"Token is required"})
     }else{
       try {
         const decode = jwt.verify(token, config.jwtSecretKey);
