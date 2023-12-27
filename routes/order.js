@@ -100,7 +100,7 @@ orderRouter.put('/update/:id', async (req, res) => {
 }
 });
 
-orderRouter.get('/admin/allorders', async (req, res) => {
+orderRouter.get('/admin/allorders',verifyToken, async (req, res) => {
   try {
    
 

@@ -36,7 +36,9 @@ userRoute.get('/:id',async(req,res)=>{
         const role=user.role
 
         res.status(200).send({success:true,role:role})
+
     } catch (error) {
+        
         res.status(400).send(error.message)
     }
 })

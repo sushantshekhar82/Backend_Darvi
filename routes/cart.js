@@ -1,13 +1,13 @@
 const express=require('express')
 const cartRoute=express();
-const verifyToken = require('../middlewares/auth')
+const verifyToken=require('../middlewares/auth')
 const bodyParser=require('body-parser');
 const cartModel = require('../models/cart');
 const productModel = require('../models/product');
 cartRoute.use(bodyParser.json())
 cartRoute.use(bodyParser.urlencoded({extended:true}))
 
-cartRoute.get("/cartitems/:id",async(req,res)=>{
+cartRoute.get("/cartitems/:id",verifyToken,async(req,res)=>{
   const { id } = req.params;
   try {
     // Find all cart items for the specified userId
@@ -24,9 +24,25 @@ cartRoute.get("/cartitems/:id",async(req,res)=>{
 
     res.status(200).send({ cart: cartItems, cartCount, totalCartPrice });
     } catch (error) {
-      res.status(400).send({"msg":error.message})
+      res.status(401).send({"msg":error.message})
     }
   })
+  cartRoute.get("/cartitems/count/:id",async(req,res)=>{
+    const { id } = req.params;
+    try {
+      // Find all cart items for the specified userId
+      const cartItems = await cartModel.find({ userId: id });
+  
+     
+  
+      // Count the number of cart items
+      const cartCount = cartItems.length;
+  
+      res.status(200).send({  cartCount});
+      } catch (error) {
+        res.status(401).send({"msg":error.message})
+      }
+    })
 
   cartRoute.post("/cartitems/addcart",verifyToken,async(req,res)=>{
     try {
@@ -67,7 +83,7 @@ cartRoute.get("/cartitems/:id",async(req,res)=>{
     }
   })
   // DELETE route to remove a specific cart item by ID
-  cartRoute.delete('/cartitems/delete/:id', async (req, res) => {
+  cartRoute.delete('/cartitems/delete/:id',verifyToken, async (req, res) => {
   const { id } = req.params;
   
   try {
@@ -83,7 +99,7 @@ cartRoute.get("/cartitems/:id",async(req,res)=>{
     res.status(500).json({ message: 'Error removing cart item', error: error.message });
   }
 });
-  cartRoute.delete('/deleteCart/:userId', async (req, res) => {
+  cartRoute.delete('/deleteCart/:userId',verifyToken, async (req, res) => {
     const { userId } = req.params;
     try {
         // Find and remove all cart items for the specified userId
